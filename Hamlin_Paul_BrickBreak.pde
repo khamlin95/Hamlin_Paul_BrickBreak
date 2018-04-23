@@ -5,14 +5,14 @@
 
 import processing.sound.*;
 
-int FR = 120, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0;
+int FR = 100, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0;
 PImage back = new PImage();
 SoundFile s0;
 ArrayList<WreckingBall> balls = new ArrayList<WreckingBall>(1);
 ArrayList<Brick> bricks = new ArrayList<Brick>(1);
 ArrayList<PowerUps> apups = new ArrayList<PowerUps>(1);
 ArrayList<PowerUps> spups = new ArrayList<PowerUps>(1);
-boolean ballKilled = false, ballSpawn = false, timerStarted = false;
+boolean ballKilled = false, ballSpawn = false, timerStarted = false, fallCalled = false;
 Timer time = new Timer();
 Paddle paddle;
 
@@ -37,6 +37,7 @@ void draw()
   background(back);
   switch(gameState) {
   case 0: //Menu State
+    score = 0;
     lives = 5;
     ballsInPlay = 1;
     ballKilled = true;
@@ -63,6 +64,7 @@ void draw()
     break;
 
   case 1: //Game state
+    fallCalled = false;
     if (random(-0.01, bricks.size()) < time.getTime().get(0)) {
       int diff = (int) random(1, time.getTime().get(1)+2);
       bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
@@ -97,51 +99,7 @@ void draw()
         if (random(0, 100) > 60) {
           spups.add(new PowerUps(random(0, 100)));
         }
-        continue;
-      }
-      for (int z = 0; z<spups.size(); z++) {
-        PowerUps p = spups.get(z);
-        p.fall();
-        p.display();
-        if (p.detectPaddle(paddle)) {
-          spups.remove(z);
-          p.startTimer();
-          apups.add(p);
-        }
-      }
-
-      for (int z = 0; z < apups.size(); z++) {
-        PowerUps p = apups.get(z);
-        System.out.println(p.getUpTime().getTime().get(1) + " : " + p.id);
-        switch(p.id) {
-        case 0:
-          balls.add(new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
-          ballsInPlay += 1;
-          apups.remove(z);
-          break;
-        case 1:
-          if (paddle.pWidth > 150) {
-            paddle.pWidth += 3;
-          }
-          apups.remove(z);
-          break;
-        case 2:
-          paddle.pWidth = 1000;
-          if (p.getUpTime().getTime().get(1) >= 10) {
-            paddle.pWidth = 95;
-            apups.remove(z);
-          }
-          break;
-        case 3:
-          paddle.speed = 5;
-          paddle.myColor = color(0, 0, 0);
-          if (p.getUpTime().getTime().get(1) >= 5) {
-            paddle.speed = 7.5;
-            paddle.myColor = color(255, 50, 50);
-            apups.remove(z);
-          }
-          break;
-        }
+        //continue;
       }
       int sideH= -1;
       for ( WreckingBall ball : balls) {
@@ -167,6 +125,55 @@ void draw()
         }
       }
       brick.displayBrick();
+    }
+    for (int z = 0; z<spups.size(); z++) {
+      PowerUps p = spups.get(z);
+      if (!fallCalled) {
+        p.fall();
+      }
+
+      p.display();
+      if (p.detectPaddle(paddle)) {
+        spups.remove(z);
+        p.startTimer();
+        apups.add(p);
+      }
+      if (p.loc.y > height) {
+        spups.remove(z);
+      }
+    }
+
+    for (int z = 0; z < apups.size(); z++) {
+      PowerUps p = apups.get(z);
+      switch(p.id) {
+      case 0:
+        balls.add(new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
+        ballsInPlay += 1;
+        apups.remove(z);
+        break;
+      case 1:
+        if (paddle.pWidth > 150) {
+          paddle.pWidth += 3;
+        }
+        apups.remove(z);
+        break;
+      case 2:
+        paddle.pWidth = 1000;
+        if (p.getUpTime().getTime().get(1) >= 10) {
+          paddle.pWidth = 95;
+          apups.remove(z);
+        }
+        break;
+      case 3:
+        paddle.speed = 5;
+        paddle.myColor = color(0, 0, 0);
+        if (p.getUpTime().getTime().get(1) >= 5) {
+          paddle.speed = 7.5;
+          paddle.myColor = color(255, 50, 50);
+          apups.remove(z);
+        }
+        break;
+      }
     }
     for ( WreckingBall ball : balls) {
       if (ball.wallCollisionCheck()) {

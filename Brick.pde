@@ -31,16 +31,16 @@ PVector position;
     float xLoc = ball.getxLoc(), yLoc = ball.getyLoc();
     
     if((xLoc + 10 >= position.x - w/1.7) && (xLoc <= position.x) && (yLoc >= position.y - h/1.8) && (yLoc <= position.y + h/1.8)){
-      hits -= 1; //<>//
+      hits -= 1;
       return 0;
     } else if ((xLoc - 10 <= position.x + w/1.7) && (xLoc >= position.x) && (yLoc >= position.y-h/1.8) && (yLoc <= position.y + h/1.8)){
-      hits -= 1; //<>//
+      hits -= 1;
       return 2;
     }else if((yLoc + 10 >= position.y - h/1.7) && (yLoc <= position.y) && (xLoc + 10 >= position.x - w/1.9) && (xLoc - 10 <= position.x + w/1.9)){
-      hits -= 1; //<>//
+      hits -= 1;
       return 1;
     }else if((yLoc - 10 <= position.y + h/1.7) && (yLoc >= position.y) && (xLoc +10 >= position.x - w/1.9) && (xLoc -10 <= position.x + w/1.9)){
-      hits -= 1; //<>//
+      hits -= 1;
       return 3;
     }else{
       return -1;
