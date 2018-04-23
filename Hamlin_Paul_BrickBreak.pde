@@ -66,7 +66,7 @@ void draw()
   case 1: //Game state
   System.out.println(ballsInPlay);
     fallCalled = false;
-    if (random(-0.01, bricks.size()) < time.getTime().get(0)) {
+    if (random(-0.01, bricks.size()) < time.getTime().get(0) && bricks.size() < (time.getTime().get(0)+1)*5) {
       int diff = (int) random(1, time.getTime().get(1)+2);
       bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
     }
@@ -159,7 +159,7 @@ void draw()
         apups.remove(z);
         break;
       case 2:
-        paddle.pWidth = 1000;
+        paddle.pWidth = 10000;
         if (p.getUpTime().getTime().get(1) >= 10) {
           paddle.pWidth = 95;
           apups.remove(z);

@@ -9,7 +9,7 @@ class Timer {
   }
 
   void update(){
-    totalTime = ((minute()*60) + second()) - startTime;
+    totalTime = ((millis()/1000)) - startTime;
   }
   
   ArrayList<Integer> getTime(){
@@ -20,7 +20,7 @@ class Timer {
   }
   
   void startTimer(){
-    startTime = (minute()*60) + second();
+    startTime = millis()/1000;
   }
   
   void resetTimer(){
