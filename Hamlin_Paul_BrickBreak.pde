@@ -64,6 +64,7 @@ void draw()
     break;
 
   case 1: //Game state
+  System.out.println(ballsInPlay);
     fallCalled = false;
     if (random(-0.01, bricks.size()) < time.getTime().get(0)) {
       int diff = (int) random(1, time.getTime().get(1)+2);
@@ -199,12 +200,13 @@ void draw()
       if (ballKilled) {
         if (!b.inPlay) {
           balls.remove(i);
+          ballKilled = false;
         }
-        ballKilled = false;
       }
     }
     if (ballsInPlay <= 0) {
       lives -= 1;
+      balls = new ArrayList<WreckingBall>(1);
       balls.add(0, new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
       ballsInPlay = 1;
       bricks = new ArrayList<Brick>(1);
