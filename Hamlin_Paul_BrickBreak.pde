@@ -7,7 +7,7 @@ import processing.sound.*;
 
 int FR = 200, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0, diff = 5;
 PImage back = new PImage();
-SoundFile s0;
+SoundFile s0, s1, s2, s3, s4;
 ArrayList<WreckingBall> balls = new ArrayList<WreckingBall>(1);
 ArrayList<Brick> bricks = new ArrayList<Brick>(1);
 ArrayList<PowerUps> apups = new ArrayList<PowerUps>(1);
@@ -27,6 +27,10 @@ void setup()
   frameRate(FR);
   noStroke();
   s0 = new SoundFile(this, "PumpedKicks.mp3");
+  s1 = new SoundFile(this, "extraBall.wav");
+  s2 = new SoundFile(this, "paddleSize.wav");
+  s3 = new SoundFile(this, "paddleStar.wav");
+  s4 = new SoundFile(this, "paddleSlowDown.wav");
   s0.loop();
   paddle = new Paddle();
 }
@@ -70,17 +74,17 @@ void draw()
       bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
     }
     if (keyPressed) {
-        if (keyCode == LEFT || key == 'A' || key == 'a') {
-          paddle.pressedLeft();
-          for(WreckingBall ball : balls){
-            paddle.detectBall(ball);
-          }
-        } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
-          paddle.pressedRight();
-          for(WreckingBall ball : balls){
-            paddle.detectBall(ball);
-          }
+      if (keyCode == LEFT || key == 'A' || key == 'a') {
+        paddle.pressedLeft();
+        for (WreckingBall ball : balls) {
+          paddle.detectBall(ball);
         }
+      } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
+        paddle.pressedRight();
+        for (WreckingBall ball : balls) {
+          paddle.detectBall(ball);
+        }
+      }
     }
     if (!timerStarted) {
       time.startTimer();
@@ -140,6 +144,20 @@ void draw()
       p.display();
       if (p.detectPaddle(paddle)) {
         spups.remove(z);
+        switch(p.id) {
+        case 0: 
+          s1.play();
+          break;
+        case 1: 
+          s2.play();
+          break;
+        case 2: 
+          s3.play();
+          break;
+        case 3: 
+          s4.play();
+          break;
+        }
         p.startTimer();
         apups.add(p);
       }
