@@ -35,6 +35,8 @@ void setup()
   s2 = new SoundFile(this, "paddleSize.wav");
   s3 = new SoundFile(this, "paddleStar.wav");
   s4 = new SoundFile(this, "paddleSlowDown.wav");
+  s0.play();
+  s0.stop();
   s0.loop();
 }
 
@@ -412,11 +414,11 @@ void mouseClicked() {
 //This holds all the bound checks for mouse clicking, making implentation look neat. 
 boolean mouseOver(int id) {
   switch(id) {
-  case 0: //Play Button
+  case 0: //Play Button or easy
     return ((mouseX > 150 && mouseX < 450) && (mouseY > 350 && mouseY < 450));
-  case 1: //Quit button
+  case 1: //Quit button or medium
     return ((mouseX > 150 && mouseX < 450) && (mouseY > 500 && mouseY < 600));
-  case 2: //Difficulty Button
+  case 2: //Difficulty Button or hard
     return ((mouseX > 150 && mouseX < 450) && (mouseY > 650 && mouseY < 750));
   }
   return false;
