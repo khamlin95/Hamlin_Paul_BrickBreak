@@ -7,7 +7,9 @@ import processing.sound.*;
 
 int FR = 200, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0, diff = 5;
 PImage back = new PImage();
-SoundFile s0;
+PImage med = new PImage();
+PImage hard = new PImage();
+SoundFile s0, s1, s2, s3, s4;
 ArrayList<WreckingBall> balls = new ArrayList<WreckingBall>(1);
 ArrayList<Brick> bricks = new ArrayList<Brick>(1);
 ArrayList<PowerUps> apups = new ArrayList<PowerUps>(1);
@@ -22,43 +24,48 @@ Paddle paddle;
 void setup()
 {
   back = loadImage("Background.jpg");
+  med = loadImage("mediumDiffBackground.jpg");
+  hard = loadImage("hardDiffBackground.jpg");
   rectMode(CORNER);
   size(600, 800);
   frameRate(FR);
   noStroke();
   s0 = new SoundFile(this, "PumpedKicks.mp3");
+  s1 = new SoundFile(this, "extraBall.wav");
+  s2 = new SoundFile(this, "paddleSize.wav");
+  s3 = new SoundFile(this, "paddleStar.wav");
+  s4 = new SoundFile(this, "paddleSlowDown.wav");
   s0.loop();
 }
 
 //Handles displaying our game and background. 
 void draw()
 {
-  switch(diff) {
-  case 5:
+ switch(diff) {
+  case 5: 
     background(back);
     break;
-  case 10:
-    background(back);
+  case 10: 
+    background(med);
     break;
-  case 20:
-    background(back);
+  case 20: 
+    background(hard);
     break;
   }
-
+  background(back);
+  switch(diff) {
+  case 5: 
+    background(back);
+    break;
+  case 10: 
+    background(med);
+    break;
+  case 20: 
+    background(hard);
+    break;
+  }
   switch(gameState) {
   case 0: //Menu State
-    switch(diff) {
-    case 5:
-      paddle = new Paddle( 105, 15);
-      break;
-    case 10:
-      paddle = new Paddle(95, 15);
-      break;
-    case 20:
-      paddle = new Paddle(75, 15);
-      break;
-    }
-
     score = 0;
     lives = 5;
     ballsInPlay = 1;
@@ -74,7 +81,6 @@ void draw()
     if (apups.size() > 0) {
       apups = new ArrayList<PowerUps>();
     }
-
     for (int i = 0; i < balls.size(); i++) {
       balls.remove(i);
     }
@@ -96,6 +102,11 @@ void draw()
         paddle.pressedLeft();
       } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
         paddle.pressedRight();
+      } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
+        paddle.pressedRight();
+        for (WreckingBall ball : balls) {
+          paddle.detectBall(ball);
+        }
       }
     }
     if (!timerStarted) {
@@ -156,6 +167,20 @@ void draw()
       p.display();
       if (p.detectPaddle(paddle)) {
         spups.remove(z);
+        switch(p.id) {
+        case 0: 
+          s1.play();
+          break;
+        case 1: 
+          s2.play();
+          break;
+        case 2: 
+          s3.play();
+          break;
+        case 3: 
+          s4.play();
+          break;
+        }
         p.startTimer();
         apups.add(p);
       }
