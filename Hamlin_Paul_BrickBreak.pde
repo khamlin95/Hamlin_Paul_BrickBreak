@@ -54,6 +54,17 @@ void draw()
   }
   switch(gameState) {
   case 0: //Menu State
+  switch(diff) {
+  case 5: 
+    paddle = new Paddle(105, 15);
+    break;
+  case 10: 
+    paddle = new Paddle(95, 15);
+    break;
+  case 20: 
+    paddle = new Paddle(85, 15);
+    break;
+  }
     score = 0;
     lives = 5;
     ballsInPlay = 1;
@@ -92,189 +103,188 @@ void draw()
         paddle.pressedRight();
       }
     }
-  }
-  if (!timerStarted) {
-    time.startTimer();
-    timerStarted = true;
-  }
-  time.update();
-  textSize(25);
-  fill(0, 0, 0);
-  text("Score: " + score, 10, 25);
-  text(nf(time.getTime().get(0), 2) + " : " + nf(time.getTime().get(1), 2), ((width*4)/8) -45, 25);
-  text("Lives: " + lives, (width * 6)/8, 25);
-  cursor(CROSS);
-  //paddle.noPress();
-  paddle.display();
-  for ( int i = 0; i < bricks.size(); i++) {
-    Brick brick = bricks.get(i);
-    brick.capDifficulty(diff);
-    if (brick.getHits() <= 0) {
-      bricks.remove(i);
-      score += 100;
-      if (random(0, 100) > 60) {
-        spups.add(new PowerUps(random(0, 100)));
+    if (!timerStarted) {
+      time.startTimer();
+      timerStarted = true;
+    }
+    time.update();
+    textSize(25);
+    fill(0, 0, 0);
+    text("Score: " + score, 10, 25);
+    text(nf(time.getTime().get(0), 2) + " : " + nf(time.getTime().get(1), 2), ((width*4)/8) -45, 25);
+    text("Lives: " + lives, (width * 6)/8, 25);
+    cursor(CROSS);
+    //paddle.noPress();
+    paddle.display();
+    for ( int i = 0; i < bricks.size(); i++) {
+      Brick brick = bricks.get(i);
+      brick.capDifficulty(diff);
+      if (brick.getHits() <= 0) {
+        bricks.remove(i);
+        score += 100;
+        if (random(0, 100) > 60) {
+          spups.add(new PowerUps(random(0, 100)));
+        }
+        //continue;
       }
-      //continue;
-    }
-    int sideH= -1;
-    for ( WreckingBall ball : balls) {
-      ball.coolDown();
-      sideH = brick.ballCollisionCheck(ball);
-      switch(sideH) {
-      case -1:
-        break;
-      case 0:
-      case 2:
-        brick.updateColor();
-        ball.invertXVel();
-        ball.bounceDecay();
-        score += 2;
-        break;
-      case 1:
-      case 3:
-        brick.updateColor();
-        ball.invertYVel();
-        ball.bounceDecay();
-        score += 2;
-        break;
-      }
-    }
-    brick.displayBrick();
-  }
-  for (int z = 0; z<spups.size(); z++) {
-    PowerUps p = spups.get(z);
-    if (!fallCalled) {
-      p.fall();
-    }
-
-    p.display();
-    if (p.detectPaddle(paddle)) {
-      spups.remove(z);
-      switch(p.id) {
-      case 0: 
-        s1.play();
-        break;
-      case 1: 
-        s2.play();
-        break;
-      case 2: 
-        s3.play();
-        break;
-      case 3: 
-        s4.play();
-        break;
-      }
-      p.startTimer();
-      apups.add(p);
-    }
-    if (p.loc.y > height) {
-      spups.remove(z);
-    }
-  }
-
-  for (int z = 0; z < apups.size(); z++) {
-    PowerUps p = apups.get(z);
-    switch(p.id) {
-    case 0:
-      balls.add(new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
-      ballsInPlay += 1;
-      apups.remove(z);
-      break;
-    case 1:
-      if (paddle.pWidth > 150) {
-        paddle.pWidth += 3;
-      }
-      apups.remove(z);
-      break;
-    case 2:
-      paddle.pWidth = 10000;
-      if (p.getUpTime().getTime().get(1) >= 10) {
-        switch(diff) {
-        case 5:
-          paddle.pWidth = 105;
+      int sideH= -1;
+      for ( WreckingBall ball : balls) {
+        ball.coolDown();
+        sideH = brick.ballCollisionCheck(ball);
+        switch(sideH) {
+        case -1:
           break;
-        case 10:
-          paddle.pWidth = 95;
+        case 0:
+        case 2:
+          brick.updateColor();
+          ball.invertXVel();
+          ball.bounceDecay();
+          score += 2;
           break;
-        case 20:
-          paddle.pWidth = 75;
+        case 1:
+        case 3:
+          brick.updateColor();
+          ball.invertYVel();
+          ball.bounceDecay();
+          score += 2;
           break;
         }
-        apups.remove(z);
       }
-      break;
-    case 3:
-      paddle.speed = 3;
-      paddle.myColor = color(0, 0, 0);
-      if (p.getUpTime().getTime().get(1) >= 5) {
-        paddle.speed = 7.5;
-        paddle.myColor = color(255, 50, 50);
-        apups.remove(z);
+      brick.displayBrick();
+    }
+    for (int z = 0; z<spups.size(); z++) {
+      PowerUps p = spups.get(z);
+      if (!fallCalled) {
+        p.fall();
       }
-      break;
-    }
-  }
-  for ( WreckingBall ball : balls) {
-    if (ball.wallCollisionCheck()) {
-      ball.inPlay = false;
-      ballsInPlay -= 1;
-      ballKilled = true;
-      if (ballsInPlay != 0) {
-        score -= 100/ballsInPlay;
-      } else {
-        score -= 100;
-      }
-      if (score < 0) {
-        score = 0;
-      }
-    }
-    paddle.detectBall(ball);
-    ball.capVel(diff);
-    ball.update();
-    ball.displayBall();
-  }
-  for (int i = 0; i < balls.size(); i++) {
-    WreckingBall b = balls.get(i);
-    if (ballKilled) {
-      if (!b.inPlay) {
-        balls.remove(i);
-        ballKilled = false;
-      }
-    }
-  }
-  if (ballsInPlay <= 0) {
-    lives -= 1;
-    balls = new ArrayList<WreckingBall>(1);
-    balls.add(0, new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
-    ballsInPlay = 1;
-    bricks = new ArrayList<Brick>(1);
-    spups = new ArrayList<PowerUps>(1);
-    apups = new ArrayList<PowerUps>(1);
-    switch(diff) {
-    case 5:
-      paddle.pWidth = 105;
-      break;
-    case 10:
-      paddle.pWidth = 95;
-      break;
-    case 20:
-      paddle.pWidth = 75;
-      break;
-    }
-    paddle.speed = 7.5;
-    paddle.myColor = color(255, 50, 50);
-    if (lives <= 0) {
-      gameState = 0;
-    }
-  }
 
-  break;
+      p.display();
+      if (p.detectPaddle(paddle)) {
+        spups.remove(z);
+        switch(p.id) {
+        case 0: 
+          s1.play();
+          break;
+        case 1: 
+          s2.play();
+          break;
+        case 2: 
+          s3.play();
+          break;
+        case 3: 
+          s4.play();
+          break;
+        }
+        p.startTimer();
+        apups.add(p);
+      }
+      if (p.loc.y > height) {
+        spups.remove(z);
+      }
+    }
 
-case 2: //Difficulty Select state
-  drawDiffMenu();
-  break;
-}
+    for (int z = 0; z < apups.size(); z++) {
+      PowerUps p = apups.get(z);
+      switch(p.id) {
+      case 0:
+        balls.add(new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
+        ballsInPlay += 1;
+        apups.remove(z);
+        break;
+      case 1:
+        if (paddle.pWidth > 150) {
+          paddle.pWidth += 3;
+        }
+        apups.remove(z);
+        break;
+      case 2:
+        paddle.pWidth = 10000;
+        if (p.getUpTime().getTime().get(1) >= 10) {
+          switch(diff) {
+          case 5:
+            paddle.pWidth = 105;
+            break;
+          case 10:
+            paddle.pWidth = 95;
+            break;
+          case 20:
+            paddle.pWidth = 75;
+            break;
+          }
+          apups.remove(z);
+        }
+        break;
+      case 3:
+        paddle.speed = 3;
+        paddle.myColor = color(0, 0, 0);
+        if (p.getUpTime().getTime().get(1) >= 5) {
+          paddle.speed = 7.5;
+          paddle.myColor = color(255, 50, 50);
+          apups.remove(z);
+        }
+        break;
+      }
+    }
+    for ( WreckingBall ball : balls) {
+      if (ball.wallCollisionCheck()) {
+        ball.inPlay = false;
+        ballsInPlay -= 1;
+        ballKilled = true;
+        if (ballsInPlay != 0) {
+          score -= 100/ballsInPlay;
+        } else {
+          score -= 100;
+        }
+        if (score < 0) {
+          score = 0;
+        }
+      }
+      paddle.detectBall(ball);
+      ball.capVel(diff);
+      ball.update();
+      ball.displayBall();
+    }
+    for (int i = 0; i < balls.size(); i++) {
+      WreckingBall b = balls.get(i);
+      if (ballKilled) {
+        if (!b.inPlay) {
+          balls.remove(i);
+          ballKilled = false;
+        }
+      }
+    }
+    if (ballsInPlay <= 0) {
+      lives -= 1;
+      balls = new ArrayList<WreckingBall>(1);
+      balls.add(0, new WreckingBall(size, (int)random(0, width), (int)random(0, height/2)));
+      ballsInPlay = 1;
+      bricks = new ArrayList<Brick>(1);
+      spups = new ArrayList<PowerUps>(1);
+      apups = new ArrayList<PowerUps>(1);
+      switch(diff) {
+      case 5:
+        paddle.pWidth = 105;
+        break;
+      case 10:
+        paddle.pWidth = 95;
+        break;
+      case 20:
+        paddle.pWidth = 75;
+        break;
+      }
+      paddle.speed = 7.5;
+      paddle.myColor = color(255, 50, 50);
+      if (lives <= 0) {
+        gameState = 0;
+      }
+    }
+
+    break;
+
+  case 2: //Difficulty Select state
+    drawDiffMenu();
+    break;
+  }
 }
 
 //Function for drawing menu. Everytime the menu is drawing, we change the starting position and velocity vectors for our ball. 
