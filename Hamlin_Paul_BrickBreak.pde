@@ -7,6 +7,8 @@ import processing.sound.*;
 
 int FR = 200, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0, diff = 5;
 PImage back = new PImage();
+PImage med = new PImage();
+PImage hard = new PImage();
 SoundFile s0, s1, s2, s3, s4;
 ArrayList<WreckingBall> balls = new ArrayList<WreckingBall>(1);
 ArrayList<Brick> bricks = new ArrayList<Brick>(1);
@@ -22,6 +24,8 @@ Paddle paddle;
 void setup()
 {
   back = loadImage("Background.jpg");
+  med = loadImage("mediumDiffBackground.jpg");
+  hard = loadImage("hardDiffBackground.jpg");
   rectMode(CORNER);
   size(600, 800);
   frameRate(FR);
@@ -39,6 +43,17 @@ void setup()
 void draw()
 {
   background(back);
+  switch(diff) {
+  case 5: 
+    background(back);
+    break;
+  case 10: 
+    background(med);
+    break;
+  case 20: 
+    background(hard);
+    break;
+  }
   switch(gameState) {
   case 0: //Menu State
     score = 0;
