@@ -40,7 +40,7 @@ class WreckingBall {
   //Draws the ball
   void displayBall() {
     stroke(100, 0, 0);
-    fill(0, 0, 0);
+    fill(0,255,255);
     ellipse(loc.x, loc.y, size, size);
   }
 

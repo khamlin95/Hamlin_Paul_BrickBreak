@@ -64,7 +64,6 @@ void draw()
     break;
 
   case 1: //Game state
-  System.out.println(ballsInPlay);
     fallCalled = false;
     if (random(-0.01, bricks.size()) < time.getTime().get(0) && bricks.size() < (time.getTime().get(0)+1)*5) {
       int diff = (int) random(1, time.getTime().get(1)+2);
