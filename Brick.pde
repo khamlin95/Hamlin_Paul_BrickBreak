@@ -52,9 +52,9 @@ PVector position;
   }
   
   void updateColor(){
-  r = hits*20;
-  g = hits*20;
-  b = hits*10;
+  r = hits*40;
+  g = hits*40;
+  b = hits*20;
   }
   
   void capDifficulty(int diff){

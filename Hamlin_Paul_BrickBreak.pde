@@ -94,7 +94,7 @@ void draw()
 
   case 1: //Game state
     fallCalled = false;
-    if (random(-0.01, bricks.size()) < time.getTime().get(0) && bricks.size() < (time.getTime().get(0)+1)*5) {
+    if (random(-0.01, bricks.size()) < time.getTime().get(0) && bricks.size() < (diff)*2) {
       int diff = (int) random(1, time.getTime().get(1)+2);
       bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
     }
@@ -112,6 +112,11 @@ void draw()
     time.update();
     textSize(25);
     fill(0, 0, 0);
+    if (diff == 5) {
+      fill(0, 0, 0);
+    } else {
+      fill(255, 255, 255);
+    }
     text("Score: " + score, 10, 25);
     text(nf(time.getTime().get(0), 2) + " : " + nf(time.getTime().get(1), 2), ((width*4)/8) -45, 25);
     text("Lives: " + lives, (width * 6)/8, 25);
@@ -152,6 +157,7 @@ void draw()
           break;
         }
       }
+      brick.updateColor();
       brick.displayBrick();
     }
     for (int z = 0; z<spups.size(); z++) {
@@ -393,7 +399,6 @@ void mouseClicked() {
     break;
 
   case 1:
-    gameState = 0;
     if (!looping) {
       if (mouseOver(0)) {
         gameState = 0;
