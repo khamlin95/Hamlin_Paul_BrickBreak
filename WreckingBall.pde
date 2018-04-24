@@ -6,8 +6,8 @@ class WreckingBall {
   WreckingBall(int S, int x, int y) {
     size = S;
     vel = new PVector();
-    vel.x = random(1.5, 3.5);
-    vel.y = random(1.5, 3.5);
+    vel.x = random(.75, 1.75);
+    vel.y = random(.75, 1.75);
     loc = new PVector();
     loc.x = x;
     loc.y = y;
@@ -40,7 +40,7 @@ class WreckingBall {
   //Draws the ball
   void displayBall() {
     stroke(100, 0, 0);
-    fill(0,255,255);
+    fill(0, 255, 255);
     ellipse(loc.x, loc.y, size, size);
   }
 
@@ -69,22 +69,35 @@ class WreckingBall {
     }
   }
 
-  void modXVel(float c) {
-    vel.x *= c;
-    if (vel.x > 5) {
-      vel.x = 5;
-    } else if (vel.x < -5) {
-      vel.x = -5;
+  void modXVel(float c, int direction) {
+    vel.x += 1;
+    switch(direction) {
+    case 0:
+      if (vel.x < 0) {
+        vel.x *= c;
+      } else if (vel.x > 0) {
+        vel.x *= (-1*c);
+      }
+
+      break;
+    case 1:
+    if (vel.x < 0) {
+        vel.x *= (-1*c);
+      } else if (vel.x > 0) {
+        vel.x *= c;
+      }
+      break;
     }
+    vel.x -= 1;
   }
 
   void invertYVel() {
     if (hitCoolD == 0) {
       vel.y *= -1;
-      if (vel.y > 6) {
-        vel.y = 6;
-      } else if (vel.y < -6) {
-        vel.y = -6;
+      if (vel.y > 3) {
+        vel.y = 3;
+      } else if (vel.y < -3) {
+        vel.y = -3;
       }
       hitCoolD = 25;
     }
@@ -113,15 +126,15 @@ class WreckingBall {
   }
 
   void capVel() {
-    if (vel.x > 7) {
-      vel.x = 7;
-    } else if (vel.x < -7) {
-      vel.x = -7;
+    if (vel.x > 3) {
+      vel.x = 3;
+    } else if (vel.x < -3) {
+      vel.x = -3;
     }
-    if (vel.y > 7) {
-      vel.y = 7;
-    } else if (vel.y < -7) {
-      vel.y = -7;
+    if (vel.y > 3) {
+      vel.y = 3;
+    } else if (vel.y < -3) {
+      vel.y = -3;
     }
   }
 

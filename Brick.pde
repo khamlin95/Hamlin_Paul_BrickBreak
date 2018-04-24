@@ -8,9 +8,9 @@ PVector position;
   position = new PVector(x, y);
   w = 60;
   h = 20;
-  r = (int)random(tier*10,tier*15);
-  g = (int)random(tier*10,tier*15);
-  b = (int)random(tier*10,tier*15);
+  r = tier*10;
+  g = tier*10;
+  b = tier*5;
   }
   
   void displayBrick(){
@@ -30,16 +30,16 @@ PVector position;
   int ballCollisionCheck(WreckingBall ball){
     float xLoc = ball.getxLoc(), yLoc = ball.getyLoc();
     
-    if((xLoc + 10 >= position.x - w/1.7) && (xLoc <= position.x) && (yLoc >= position.y - h/1.8) && (yLoc <= position.y + h/1.8)){
+    if((xLoc + 10 >= position.x - w/1.8) && (xLoc <= position.x) && (yLoc >= position.y - h/1.7) && (yLoc <= position.y + h/1.7)){
       hits -= 1;
       return 0;
-    } else if ((xLoc - 10 <= position.x + w/1.7) && (xLoc >= position.x) && (yLoc >= position.y-h/1.8) && (yLoc <= position.y + h/1.8)){
+    } else if ((xLoc - 10 <= position.x + w/1.8) && (xLoc >= position.x) && (yLoc >= position.y-h/1.7) && (yLoc <= position.y + h/1.7)){
       hits -= 1;
       return 2;
-    }else if((yLoc + 10 >= position.y - h/1.7) && (yLoc <= position.y) && (xLoc + 10 >= position.x - w/1.9) && (xLoc - 10 <= position.x + w/1.9)){
+    }else if((yLoc + 10 >= position.y - h/1.99) && (yLoc <= position.y) && (xLoc + 10 >= position.x - w/1.85) && (xLoc - 10 <= position.x + w/1.85)){
       hits -= 1;
       return 1;
-    }else if((yLoc - 10 <= position.y + h/1.7) && (yLoc >= position.y) && (xLoc +10 >= position.x - w/1.9) && (xLoc -10 <= position.x + w/1.9)){
+    }else if((yLoc - 10 <= position.y + h/1.99) && (yLoc >= position.y) && (xLoc +10 >= position.x - w/1.85) && (xLoc -10 <= position.x + w/1.85)){
       hits -= 1;
       return 3;
     }else{
@@ -52,8 +52,14 @@ PVector position;
   }
   
   void updateColor(){
-  r = r - 20;
-  g = g - 20;
-  b = b - 20;
+  r = hits*10;
+  g = hits*10;
+  b = hits*5;
+  }
+  
+  void capDifficulty(int diff){
+    if(hits > diff){
+      hits = diff;
+    }
   }
 }

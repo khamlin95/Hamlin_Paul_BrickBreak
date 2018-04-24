@@ -15,7 +15,7 @@ class PowerUps{
       id = 3; //Paddle slow down
     }
   loc = new PVector(random(20, width - 20), -10);
-  fallRate = 2;
+  fallRate = 1;
   d = 20;
   time = new Timer();
   }

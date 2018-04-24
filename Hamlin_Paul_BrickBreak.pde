@@ -5,7 +5,7 @@
 
 import processing.sound.*;
 
-int FR = 100, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0;
+int FR = 200, lives = 5, gameState = 0, size = 20, ballsInPlay = 0, score = 0, diff = 5;
 PImage back = new PImage();
 SoundFile s0;
 ArrayList<WreckingBall> balls = new ArrayList<WreckingBall>(1);
@@ -70,13 +70,17 @@ void draw()
       bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
     }
     if (keyPressed) {
-      if (key == CODED) {
-        if (keyCode == LEFT) {
+        if (keyCode == LEFT || key == 'A' || key == 'a') {
           paddle.pressedLeft();
-        } else if (keyCode == RIGHT) {
+          for(WreckingBall ball : balls){
+            paddle.detectBall(ball);
+          }
+        } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
           paddle.pressedRight();
+          for(WreckingBall ball : balls){
+            paddle.detectBall(ball);
+          }
         }
-      }
     }
     if (!timerStarted) {
       time.startTimer();
@@ -93,6 +97,7 @@ void draw()
     paddle.display();
     for ( int i = 0; i < bricks.size(); i++) {
       Brick brick = bricks.get(i);
+      brick.capDifficulty(diff);
       if (brick.getHits() <= 0) {
         bricks.remove(i);
         score += 100;
@@ -165,7 +170,7 @@ void draw()
         }
         break;
       case 3:
-        paddle.speed = 5;
+        paddle.speed = 3;
         paddle.myColor = color(0, 0, 0);
         if (p.getUpTime().getTime().get(1) >= 5) {
           paddle.speed = 7.5;

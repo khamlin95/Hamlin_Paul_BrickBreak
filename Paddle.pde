@@ -4,7 +4,6 @@ class Paddle {
   float pWidth;
   float pHeight;
   color myColor;
-  float accel;
   float speed;
   int direction;
   final int pLEFT=1;
@@ -23,7 +22,6 @@ class Paddle {
     myColor=color(255, 50, 50); 
     speed=7.5;
     direction=pNONE;
-    accel = 5;
   }
 
   void display() {
@@ -56,14 +54,19 @@ class Paddle {
   boolean detectBall(WreckingBall ball){
     float xLoc = ball.getxLoc(), yLoc = ball.getyLoc();
     
-    if((yLoc + 10 >= y - pHeight/2.0) && (yLoc <= y) && (xLoc + 10 >= x - pWidth/2.0) && (xLoc - 10 <= x + pWidth/2.0)){
+    if((yLoc + 10 >= y - pHeight/1.65) && (yLoc <= y) && (xLoc + 10 >= x - pWidth/1.85) && (xLoc - 10 <= x + pWidth/1.85)){
       float bounce = xLoc - x;
-      while(bounce > 5 || bounce < -5){
-        bounce = bounce/10.0;
+      if(bounce >= 0){
+        ball.modXVel(abs(bounce)/10.0, 1);
+      }else if(bounce < 0){
+        ball.modXVel(abs(bounce)/10.0, 0);
       }
       ball.paddleInvertY();
-      ball.modXVel(-1*bounce);
       return true;
+    }else if((xLoc + 10 >= x - pWidth/1.9) && (xLoc <= x) && (yLoc >= y - pHeight/1.7) && (yLoc <= y + pHeight/1.7)){
+      ball.invertXVel();
+    } else if ((xLoc - 10 <= x + pWidth/1.9) && (xLoc >= x) && (yLoc >= y-pHeight/1.7) && (yLoc <= y + pHeight/1.7)){
+      ball.invertXVel();
     }
   return false;
   }
