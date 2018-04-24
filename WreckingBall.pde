@@ -1,7 +1,7 @@
 class WreckingBall {
   int size, hitCoolD;
   PVector vel, loc;
-  boolean inPlay;
+  boolean inPlay, hitBack;
 
   WreckingBall(int S, int x, int y) {
     size = S;
@@ -12,6 +12,7 @@ class WreckingBall {
     loc.x = x;
     loc.y = y;
     inPlay = true;
+    hitBack = false;
   }
 
   //Checks for wall Collision with the ball. This was taken from Kyle's HW 7
@@ -46,6 +47,9 @@ class WreckingBall {
 
   //Updates ball position.
   void update() {
+    if (loc.y < 750) {
+      hitBack = false;
+    }
     loc.x += vel.x;
     loc.y += vel.y;
   }
@@ -81,7 +85,7 @@ class WreckingBall {
 
       break;
     case 1:
-    if (vel.x < 0) {
+      if (vel.x < 0) {
         vel.x *= (-1*c);
       } else if (vel.x > 0) {
         vel.x *= c;
@@ -125,16 +129,44 @@ class WreckingBall {
     }
   }
 
-  void capVel() {
-    if (vel.x > 3) {
-      vel.x = 3;
-    } else if (vel.x < -3) {
-      vel.x = -3;
-    }
-    if (vel.y > 3) {
-      vel.y = 3;
-    } else if (vel.y < -3) {
-      vel.y = -3;
+  void capVel(int diff) {
+    switch(diff) {
+    case 5:
+      if (vel.x > 2) {
+        vel.x = 2;
+      } else if (vel.x < -2) {
+        vel.x = -2;
+      }
+      if (vel.y > 2) {
+        vel.y = 2;
+      } else if (vel.y < -2) {
+        vel.y = -2;
+      }
+      break;
+    case 10:
+      if (vel.x > 3) {
+        vel.x = 3;
+      } else if (vel.x < -3) {
+        vel.x = -3;
+      }
+      if (vel.y > 3) {
+        vel.y = 3;
+      } else if (vel.y < -3) {
+        vel.y = -3;
+      }
+      break;
+    case 20:
+      if (vel.x > 4) {
+        vel.x = 4;
+      } else if (vel.x < -4) {
+        vel.x = -4;
+      }
+      if (vel.y > 4) {
+        vel.y = 4;
+      } else if (vel.y < -4) {
+        vel.y = -4;
+      };
+      break;
     }
   }
 

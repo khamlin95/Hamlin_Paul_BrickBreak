@@ -28,15 +28,37 @@ void setup()
   noStroke();
   s0 = new SoundFile(this, "PumpedKicks.mp3");
   s0.loop();
-  paddle = new Paddle();
 }
 
 //Handles displaying our game and background. 
 void draw()
 {
-  background(back);
+  switch(diff) {
+  case 5:
+    background(back);
+    break;
+  case 10:
+    background(back);
+    break;
+  case 20:
+    background(back);
+    break;
+  }
+
   switch(gameState) {
   case 0: //Menu State
+    switch(diff) {
+    case 5:
+      paddle = new Paddle( 105, 15);
+      break;
+    case 10:
+      paddle = new Paddle(95, 15);
+      break;
+    case 20:
+      paddle = new Paddle(75, 15);
+      break;
+    }
+
     score = 0;
     lives = 5;
     ballsInPlay = 1;
@@ -70,17 +92,11 @@ void draw()
       bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
     }
     if (keyPressed) {
-        if (keyCode == LEFT || key == 'A' || key == 'a') {
-          paddle.pressedLeft();
-          for(WreckingBall ball : balls){
-            paddle.detectBall(ball);
-          }
-        } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
-          paddle.pressedRight();
-          for(WreckingBall ball : balls){
-            paddle.detectBall(ball);
-          }
-        }
+      if (keyCode == LEFT || key == 'A' || key == 'a') {
+        paddle.pressedLeft();
+      } else if (keyCode == RIGHT || key == 'D' || key == 'd') {
+        paddle.pressedRight();
+      }
     }
     if (!timerStarted) {
       time.startTimer();
@@ -165,7 +181,17 @@ void draw()
       case 2:
         paddle.pWidth = 10000;
         if (p.getUpTime().getTime().get(1) >= 10) {
-          paddle.pWidth = 95;
+          switch(diff) {
+          case 5:
+            paddle.pWidth = 105;
+            break;
+          case 10:
+            paddle.pWidth = 95;
+            break;
+          case 20:
+            paddle.pWidth = 75;
+            break;
+          }
           apups.remove(z);
         }
         break;
@@ -195,7 +221,7 @@ void draw()
         }
       }
       paddle.detectBall(ball);
-      ball.capVel();
+      ball.capVel(diff);
       ball.update();
       ball.displayBall();
     }
@@ -216,7 +242,17 @@ void draw()
       bricks = new ArrayList<Brick>(1);
       spups = new ArrayList<PowerUps>(1);
       apups = new ArrayList<PowerUps>(1);
-      paddle.pWidth = 95;
+      switch(diff) {
+      case 5:
+        paddle.pWidth = 105;
+        break;
+      case 10:
+        paddle.pWidth = 95;
+        break;
+      case 20:
+        paddle.pWidth = 75;
+        break;
+      }
       paddle.speed = 7.5;
       paddle.myColor = color(255, 50, 50);
       if (lives <= 0) {
@@ -224,6 +260,10 @@ void draw()
       }
     }
 
+    break;
+
+  case 2: //Difficulty Select state
+    drawDiffMenu();
     break;
   }
 }
@@ -245,7 +285,35 @@ void drawMenu() {
   rect(width/2, height/2 + 150, 300, 100);
   fill(0);
   text("Quit", width/2 - 60, height/2 +170);
-  if (mouseOver(0) || mouseOver(1)) {
+  fill(255, 255, 10);
+  rect(width/2, height/2 + 300, 300, 100);
+  fill(0);
+  text("Difficulty", width/2 - 115, height/2+320);
+  if (mouseOver(0) || mouseOver(1) || mouseOver(2)) {
+    cursor(HAND);
+  } else {
+    cursor(ARROW);
+  }
+}
+
+void drawDiffMenu() {
+  textSize(55);
+  stroke(84, 219, 114);
+  fill(18, 139, 45);
+  rectMode(CENTER);
+  rect(width/2, height/2, 300, 100);
+  fill(0);
+  text("Easy", width/2 - 60, height/2 + 20);
+  stroke(219, 84, 84);
+  fill(255, 255, 10);
+  rect(width/2, height/2 + 150, 300, 100);
+  fill(0);
+  text("Medium", width/2 - 100, height/2 +170);
+  fill(255, 84, 45);
+  rect(width/2, height/2 + 300, 300, 100);
+  fill(0);
+  text("Hard", width/2 - 60, height/2+320);
+  if (mouseOver(0) || mouseOver(1) || mouseOver(2)) {
     cursor(HAND);
   } else {
     cursor(ARROW);
@@ -298,12 +366,26 @@ void mouseClicked() {
       gameState = 1;
     } else if (mouseOver(1)) {
       exit();
+    } else if (mouseOver(2)) {
+      gameState = 2;
     }
     break;
 
   case 1:
     gameState = 0;
     break;
+
+  case 2:
+    if (mouseOver(0)) {
+      diff = 5;
+      gameState = 0;
+    } else if (mouseOver(1)) {
+      diff = 10;
+      gameState = 0;
+    } else if (mouseOver(2)) {
+      diff = 20;
+      gameState = 0;
+    }
   }
 }
 
@@ -315,6 +397,8 @@ boolean mouseOver(int id) {
     return ((mouseX > 150 && mouseX < 450) && (mouseY > 350 && mouseY < 450));
   case 1: //Quit button
     return ((mouseX > 150 && mouseX < 450) && (mouseY > 500 && mouseY < 600));
+  case 2: //Difficulty Button
+    return ((mouseX > 150 && mouseX < 450) && (mouseY > 650 && mouseY < 750));
   }
   return false;
 }

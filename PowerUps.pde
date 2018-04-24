@@ -9,9 +9,9 @@ class PowerUps{
       id = 0; //Spawn new ball
     }else if(type >= 50 && type <= 70){
       id = 1; //Increase paddle width
-    }else if(type > 70 && type <= 80) {
+    }else if(type > 70 && type <= 75) {
       id = 2; //Auto Bounce
-    }else if(type > 80 && type <= 100){
+    }else if(type > 75 && type <= 100){
       id = 3; //Paddle slow down
     }
   loc = new PVector(random(20, width - 20), -10);
