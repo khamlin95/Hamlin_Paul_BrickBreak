@@ -54,17 +54,17 @@ void draw()
   }
   switch(gameState) {
   case 0: //Menu State
-  switch(diff) {
-  case 5: 
-    paddle = new Paddle(105, 15);
-    break;
-  case 10: 
-    paddle = new Paddle(95, 15);
-    break;
-  case 20: 
-    paddle = new Paddle(85, 15);
-    break;
-  }
+    switch(diff) {
+    case 5: 
+      paddle = new Paddle(105, 15);
+      break;
+    case 10: 
+      paddle = new Paddle(95, 15);
+      break;
+    case 20: 
+      paddle = new Paddle(85, 15);
+      break;
+    }
     score = 0;
     lives = 5;
     ballsInPlay = 1;
@@ -291,7 +291,7 @@ void draw()
 //Then we begin to draw our menu, which simply consists of play and quit for now. 
 void drawMenu() {
   textSize(55);
-  fill(0);
+  fill(169, 169, 169);
   text("Brick Breaker!", 120, 100);
   stroke(84, 219, 114);
   fill(18, 139, 45);
@@ -352,7 +352,7 @@ void keyPressed() {
       rectMode(CENTER);
       rect(width/2, height/2, 300, 100);
       fill(255);
-      text("Play!", width/2 - 60, height/2 + 20);
+      text("Menu!", width/2 - 75, height/2 + 20);
       stroke(219, 84, 84);
       fill(255, 84, 45);
       rect(width/2, height/2 + 150, 300, 100);
@@ -392,6 +392,15 @@ void mouseClicked() {
 
   case 1:
     gameState = 0;
+    if (!looping) {
+      if (mouseOver(0)) {
+        gameState = 0;
+        loop();
+      }
+      if (mouseOver(1)) {
+        exit();
+      }
+    }
     break;
 
   case 2:
