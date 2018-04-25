@@ -146,14 +146,14 @@ void draw()
           brick.updateColor();
           ball.invertXVel();
           ball.bounceDecay();
-          score += 2;
+          score += 5;
           break;
         case 1:
         case 3:
           brick.updateColor();
           ball.invertYVel();
           ball.bounceDecay();
-          score += 2;
+          score += 5;
           break;
         }
       }
