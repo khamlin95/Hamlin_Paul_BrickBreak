@@ -94,9 +94,9 @@ void draw()
 
   case 1: //Game state
     fallCalled = false;
-    if (random(-0.01, bricks.size()) < time.getTime().get(0) && bricks.size() < (diff)*2) {
+    if (random(-0.01, bricks.size()) < time.getTime().get(0) && bricks.size() < ((time.getTime().get(0)) + 1) * 5) {
       int diff = (int) random(1, time.getTime().get(1)+2);
-      bricks.add(new Brick(diff, (int)random(30, width - 30), (int)random(35, (2*height)/3)));
+      bricks.add(new Brick(diff, (int)random(100, width - 100), (int)random(35, height/2)));
     }
     if (keyPressed) {
       if (keyCode == LEFT || key == 'A' || key == 'a') {
@@ -129,7 +129,7 @@ void draw()
       if (brick.getHits() <= 0) {
         bricks.remove(i);
         score += 100;
-        if (random(0, 100) > 60) {
+        if (random(0, 100) > 80) {
           spups.add(new PowerUps(random(0, 100)));
         }
         //continue;
@@ -200,10 +200,25 @@ void draw()
         apups.remove(z);
         break;
       case 1:
-        if (paddle.pWidth > 150) {
-          paddle.pWidth += 3;
+         paddle.speed = 10;
+         paddle.pWidth = 150;
+         paddle.myColor = color(70, 100, 70);
+        if (p.getUpTime().getTime().get(1) >= 5) {
+          switch(diff) {
+          case 5:
+            paddle.pWidth = 105;
+            break;
+          case 10:
+            paddle.pWidth = 95;
+            break;
+          case 20:
+            paddle.pWidth = 75;
+            break;
+          }
+          paddle.speed = 7.5;
+          paddle.myColor = color(255, 50, 50);
+          apups.remove(z);
         }
-        apups.remove(z);
         break;
       case 2:
         paddle.pWidth = 10000;
@@ -248,7 +263,7 @@ void draw()
         }
       }
       paddle.detectBall(ball);
-      ball.capVel(diff);
+      ball.capVel(diff, time.getTime().get(0));
       ball.update();
       ball.displayBall();
     }

@@ -129,42 +129,48 @@ class WreckingBall {
     }
   }
 
-  void capVel(int diff) {
+  void capVel(int diff, float time) {
+    float temp = 0.001 * time;
+    if(time <= 0){
+      time = 1;
+    }else{
+      time += temp;
+    }
     switch(diff) {
     case 5:
-      if (vel.x > 2) {
-        vel.x = 2;
-      } else if (vel.x < -2) {
-        vel.x = -2;
+      if (vel.x > 2*time) {
+        vel.x = 2*time;
+      } else if (vel.x < -2*time) {
+        vel.x = -2*time;
       }
-      if (vel.y > 2) {
-        vel.y = 2;
-      } else if (vel.y < -2) {
-        vel.y = -2;
+      if (vel.y > 2*time) {
+        vel.y = 2*time;
+      } else if (vel.y < -2*time) {
+        vel.y = -2*time;
       }
       break;
     case 10:
-      if (vel.x > 3) {
-        vel.x = 3;
-      } else if (vel.x < -3) {
-        vel.x = -3;
+      if (vel.x > 3*time) {
+        vel.x = 3*time;
+      } else if (vel.x < -3*time) {
+        vel.x = -3*time;
       }
-      if (vel.y > 3) {
-        vel.y = 3;
-      } else if (vel.y < -3) {
-        vel.y = -3;
+      if (vel.y > 3*time) {
+        vel.y = 3*time;
+      } else if (vel.y < -3*time) {
+        vel.y = -3*time;
       }
       break;
     case 20:
-      if (vel.x > 4) {
-        vel.x = 4;
-      } else if (vel.x < -4) {
-        vel.x = -4;
+      if (vel.x > 4*time) {
+        vel.x = 4*time;
+      } else if (vel.x < -4*time) {
+        vel.x = -4*time;
       }
-      if (vel.y > 4) {
-        vel.y = 4;
-      } else if (vel.y < -4) {
-        vel.y = -4;
+      if (vel.y > 4*time) {
+        vel.y = 4*time;
+      } else if (vel.y < -4*time) {
+        vel.y = -4*time;
       };
       break;
     }
